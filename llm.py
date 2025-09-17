@@ -1,6 +1,7 @@
 import ollama
 import re
 from wether import get_weather
+from print_data import print_wether
 
 
 
@@ -60,13 +61,7 @@ def process_response(response_text):
             
             print(f"{function_name} _ {argument}")
             if function_name == "get_weather":
-                weather = get_weather(argument)
-                print(f"\nПогода в городе {weather['город']}, {weather['страна']}:")
-                print(f"Температура: {weather['температура']}°C")
-                print(f"Ощущается как: {weather['ощущается_как']}°C")
-                print(f"Условия: {weather['условия']}")
-                print(f"Влажность: {weather['влажность']}%")
-                print(f"Скорость ветра: {weather['скорость_ветра']} км/ч")
+                print_wether(argument)
             
             
             
