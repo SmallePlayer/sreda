@@ -3,6 +3,7 @@ import re
 from wether import get_weather
 
 
+
 def generate_prompt(text):
     response = ollama.generate(
         model='qwen3:0.6b',
