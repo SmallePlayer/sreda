@@ -27,7 +27,7 @@ while True:
         text = result.get("text", "").lower()
         
         if text:
-            print(f"Распознано: {text}")
+            # print(f"Распознано: {text}")
             
             if not is_listening_for_command and KEYWORD in text:
                 print("Да, я слушаю...")
