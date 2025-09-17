@@ -1,14 +1,17 @@
-import ollama
 import re
-from wether import get_weather
-from print_data import print_wether
+from typing import Callable
+
+import ollama
+
+from src.config.settings import OLLAMA_MODEL
+from src.services.weather import get_weather
+from src.services.weather_printer import print_weather
 
 
-
-def generate_prompt(text):
+def generate_prompt(user_text: str) -> None:
     response = ollama.generate(
-        model='qwen3:0.6b',
-        prompt = f"""
+        model=OLLAMA_MODEL,
+        prompt=f"""
         Ты - голосовой ассистент. Твоя задача давать краткие и точные ответы.
 
         ВАЖНЫЕ ПРАВИЛА:
@@ -24,44 +27,42 @@ def generate_prompt(text):
         • "Что по погоде в Лондоне?" → (get_weather, Лондон)
         • "Скажи погоду для Парижа" → (get_weather, Париж)
 
-        Вопрос пользователя: {text}
+        Вопрос пользователя: {user_text}
 
         Твой ответ:
-        """
-        
-        
+        """,
     )
 
     full_response = response['response']
-    
-    # Ищем текст после </think>
+
     match = re.search(r'</think>(.*)', full_response, re.DOTALL)
-    
-    if match:
-        # Если нашли тег, выводим текст после него
-        result = match.group(1).strip()
-        print("------------start----------------")
-        print(result)
-        print("-------------end-----------------")
-        process_response(result)
-    else:
-        print("----------------------------")
-        print(f"{full_response}")
-        print("----------------------------")
-        
-        
-def process_response(response_text):
-    pattern = r'\((\w+)\s*,\s*([^)]+)\)'
+    result_text = match.group(1).strip() if match else full_response.strip()
+
+    print("------------start----------------")
+    print(result_text)
+    print("-------------end-----------------")
+    process_response(result_text)
+
+
+def process_response(response_text: str) -> None:
+    pattern = r'\((\w+)\s*,\s*([^\)]+)\)'
     matches = re.findall(pattern, response_text)
-    
-    if matches:
-        for match in matches:
-            function_name, argument = match
-            argument = argument.strip()
-            
-            print(f"{function_name} _ {argument}")
-            if function_name == "get_weather":
-                print_wether(argument)
-            
-            
-            
+
+    if not matches:
+        return
+
+    dispatch: dict[str, Callable[[str], None]] = {
+        'get_weather': _handle_get_weather,
+    }
+
+    for function_name, argument in matches:
+        argument = argument.strip()
+        handler = dispatch.get(function_name)
+        if handler:
+            handler(argument)
+
+
+def _handle_get_weather(city: str) -> None:
+    weather = get_weather(city)
+    print_weather(weather)
+

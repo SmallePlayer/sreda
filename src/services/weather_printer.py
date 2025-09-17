@@ -1,11 +1,15 @@
-from wether import get_weather
+from typing import Dict, Union
 
 
-def print_wether(argument):
-    weather = get_weather(argument)
+def print_weather(weather: Union[Dict[str, object], str]) -> None:
+    if isinstance(weather, str):
+        print(weather)
+        return
+
     print(f"\nПогода в городе {weather['город']}, {weather['страна']}:")
     print(f"Температура: {weather['температура']}°C")
     print(f"Ощущается как: {weather['ощущается_как']}°C")
     print(f"Условия: {weather['условия']}")
     print(f"Влажность: {weather['влажность']}%")
     print(f"Скорость ветра: {weather['скорость_ветра']} км/ч")
+
