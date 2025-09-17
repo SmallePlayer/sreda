@@ -1,0 +1,5 @@
+.api.txt
+__pycache__/
+venv/
+small_model/
+big_model/
