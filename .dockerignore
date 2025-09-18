@@ -1,0 +1,14 @@
+venv
+__pycache__
+.git
+.gitignore
+.env
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.db
+big_model
+*.wav
+
+
