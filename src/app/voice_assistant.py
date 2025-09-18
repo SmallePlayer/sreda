@@ -45,7 +45,6 @@ def run_voice_assistant() -> None:
                         print(f"Снова слушаю ключевое слово '{KEYWORD}'...")
 
 
-
 if __name__ == "__main__":
     run_voice_assistant()
 
