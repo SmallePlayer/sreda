@@ -1,5 +1,9 @@
+import os
+import sys
 import sqlite3
 from typing import Optional
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from src.config.settings import SQLITE_PATH
 

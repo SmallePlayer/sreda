@@ -1,7 +1,11 @@
 import re
+import os
+import sys
 from typing import Callable
 
 import ollama
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from src.config.settings import OLLAMA_MODEL
 from src.services.weather import get_weather

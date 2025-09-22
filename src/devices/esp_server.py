@@ -1,5 +1,10 @@
 import socket
+import subprocess
+import signal
+import os
 
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 from src.config.settings import TCP_HOST, TCP_PORT
 
 

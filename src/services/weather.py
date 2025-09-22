@@ -1,5 +1,9 @@
+import os
+import sys
 import requests
 from typing import Dict, Union
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from src.config.settings import WEATHER_API_KEY
 

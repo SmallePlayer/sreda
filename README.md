@@ -1,11 +1,26 @@
 ## SREDA – модульная архитектура
 
 ### Запуск
-- Создайте и активируйте venv
+- Создайте и активируйте venv: `python -m venv venv && source venv/bin/activate`
 - Установите зависимости: `pip install -r requirements.txt`
-- Скопируйте `.env.example` в `.env` и заполните ключи
-- Запуск ассистента: `python -m src.app.voice_assistant`
-- Запуск TCP-сервера устройства: `python -m src.devices.esp_server`
+- Скачайте модель Vosk (см. раздел "Установка модели Vosk" ниже)
+- Создайте файл `.env` и заполните ключи (см. раздел "Переменные окружения")
+- Запуск ассистента: `python run_voice_assistant.py`
+- Запуск TCP-сервера устройства: `python run_esp_server.py`
+
+### Установка модели Vosk
+Для работы голосового ассистента необходимо скачать модель Vosk:
+
+1. Создайте папку `models` в корне проекта
+2. Скачайте русскую модель (рекомендуется small):
+   ```bash
+   mkdir -p models
+   cd models
+   wget https://alphacep.com/vosk/models/vosk-model-small-ru-0.22.zip
+   unzip vosk-model-small-ru-0.22.zip
+   mv vosk-model-small-ru-0.22 small_model
+   ```
+3. Убедитесь, что в `.env` указан правильный путь: `VOSK_MODEL_DIR=models/small_model`
 
 ### Структура
 ```

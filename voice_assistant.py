@@ -1,6 +1,9 @@
 from vosk import Model, KaldiRecognizer
 import pyaudio
 import json
+import os
+
+
 
 from src.core.llm import generate_prompt
 from src.config.settings import VOSK_MODEL_DIR
