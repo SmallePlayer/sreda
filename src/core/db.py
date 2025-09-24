@@ -20,10 +20,35 @@ conn.commit()
 
 def add_device(name: str, temp: int, humidity: int):
     cursor.execute('''
-    INSERT INTO users (name, temp, humidity)
+    INSERT INTO devices (name, temp, humidity)
     VALUES (?, ?, ?)
     ''', (name, temp, humidity))
+    return f"Add name: {name}, temp: {temp}, humidity: {humidity}"
 
+def get_data(id):
+    cursor.execute('SELECT * FROM devices WHERE id = ?', (1,))
+    data = cursor.fetchall()
+    conn.commit()
+    return data
 
+def update_temp(id: int, temp: int,):
+    cursor.execute('''
+        UPDATE devices 
+        SET temp = ? 
+        WHERE id = ?
+    ''', (temp, id))
+    conn.commit()
+    
+    return f"Update temp id:{id}"
+
+def update_humidity(id: int, humidity: int,):
+    cursor.execute('''
+        UPDATE devices 
+        SET humidity = ? 
+        WHERE id = ?
+    ''', (humidity, id))
+    conn.commit()
+    
+    return f"Update humidity id:{id}"
 
 
