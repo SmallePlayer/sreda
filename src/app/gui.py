@@ -12,16 +12,22 @@ class MainWindow(QMainWindow): # главный класс приложения
         main_widget = QWidget() # центральный виджет который содержит всё
         self.setCentralWidget(main_widget) # выравнивание этого виджета по середине и передаем сам виджет который хотим выравнить
 
-        self.layout_main = QVBoxLayout()
-
-        self.vert_widget = QWidget()
-        self.layout_h_main = QHBoxLayout()
-        
-
         self.create_widgets()
 
         self.create_card()
         
+        self.processing_layout()
+        
+        main_widget.setLayout(self.layout_main)
+
+        self.event_hand()
+    
+    def processing_layout(self):
+
+        self.layout_main = QVBoxLayout()
+
+        self.vert_widget = QWidget()
+        self.layout_h_main = QHBoxLayout()
 
         self.layout_h_main.addWidget(self.widget_card)
         self.layout_h_main.addWidget(self.label_card2)
@@ -31,15 +37,10 @@ class MainWindow(QMainWindow): # главный класс приложения
 
         self.vert_widget.setLayout(self.layout_h_main)
 
-
         self.layout_main.addWidget(self.vert_widget)
 
         self.layout_main.addWidget(self.button2)
 
-        
-        main_widget.setLayout(self.layout_main)
-
-        self.event_hand()
 
     def create_widgets(self):
         self.label_card1 = QLabel("Epta1")
