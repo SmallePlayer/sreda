@@ -16,40 +16,9 @@ class MainWindow(QMainWindow): # главный класс приложения
 
         self.vert_widget = QWidget()
         self.layout_h_main = QHBoxLayout()
-        """
-        QVBoxLayout() - создаёт макет для вертикального расположения виджетов
-        Виды макетов:
-        - QVBoxLayout: вертикальное расположение (сверху вниз)
-        - QHBoxLayout: горизонтальное расположение (слева направо)  
-        - QGridLayout: расположение в сетке (строка/столбец)
-        - QFormLayout: для форм (метка + поле ввода)
-        """
-
         
 
-
-        self.label_card1 = QLabel("Epta1")
-        self.label_card1.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.label_card2 = QLabel("Epta2")
-        self.label_card2.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.label_card3 = QLabel("Epta3")
-        self.label_card3.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        """
-        .setAlignment(alignment) - устанавливает выравнивание текста внутри метки
-        Аргумент: константа из Qt.AlignmentFlag
-        
-        Возможные значения:
-        - Qt.AlignmentFlag.AlignLeft: выравнивание по левому краю
-        - Qt.AlignmentFlag.AlignRight: по правому краю  
-        - Qt.AlignmentFlag.AlignCenter: по центру
-        - Qt.AlignmentFlag.AlignTop: по верху
-        - Qt.AlignmentFlag.AlignBottom: по низу
-        Можно комбинировать: Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
-        """
-
-        self.button1 = QPushButton("жми на меня")
-
-        self.button2 = QPushButton("not click me")
+        self.create_widgets()
 
         self.create_card()
         
@@ -57,7 +26,6 @@ class MainWindow(QMainWindow): # главный класс приложения
         self.layout_h_main.addWidget(self.widget_card)
         self.layout_h_main.addWidget(self.label_card2)
         self.layout_h_main.addWidget(self.label_card3)
-
 
         self.widget_card.setLayout(self.layout_widget)
 
@@ -71,10 +39,23 @@ class MainWindow(QMainWindow): # главный класс приложения
         
         main_widget.setLayout(self.layout_main)
 
+        self.event_hand()
+
+    def create_widgets(self):
+        self.label_card1 = QLabel("Epta1")
+        self.label_card1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.label_card2 = QLabel("Epta2")
+        self.label_card2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.label_card3 = QLabel("Epta3")
+        self.label_card3.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.button1 = QPushButton("жми на меня")
+        self.button2 = QPushButton("not click me")
+        
+
+    def event_hand(self):
         self.button1.clicked.connect(self.on_but1_click)
         self.button2.clicked.connect(self.on_but2_click)
-
-    
 
 
     def create_card(self):
