@@ -1,9 +1,12 @@
 #include <WiFi.h>
+#include <ArduinoJson.h>
 
 const char* ssid = "TP-Link_9108";
 const char* password = "12345678";
 const char* host = "192.168.0.105";  // Например "192.168.1.100"
 const int port = 12345;
+
+String name_id = "esp32";
 
 WiFiClient client;
 
@@ -28,7 +31,9 @@ void setup() {
   // Отправка первого сообщения
   client.print("Привет от ESP32!");
 }
-int a = 0;
+
+int temp = 25;
+int humidity = 35;
 void loop() {
   // Чтение ответа от сервера
   // if (client.available()) {
@@ -36,6 +41,16 @@ void loop() {
   //   Serial.print("Ответ от сервера: ");
   //   Serial.println(response);
   // }
+
+  // !!!TODO: доделать чтение с датчика и отправка
+
+  StaticJsonDocument<200> doc;
+  doc["name_id"] = name_id;
+  doc["temp"] = temp;
+  doc["humidity"] = humidity;
+
+  String send_json;
+  serializeJson(doc, send_json;)
 
   // Отправка новых сообщений каждые 5 секунд
   static unsigned long last_time = 0;
