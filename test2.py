@@ -2,7 +2,7 @@ import socket
 import base64
 import cv2
 
-HOST = "10.188.43.230"
+HOST = "10.110.111.230"
 PORT = 12532
 
 def send_message():
