@@ -36,10 +36,10 @@ def send_message():
             sock.send(encoded_data)
             
             # Показываем локально что отправляем
-            cv2.imshow("Local Camera", frame)
+            # cv2.imshow("Local Camera", frame)
             
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            # if cv2.waitKey(1) & 0xFF == ord('q'):
+            #     break
                 
     except Exception as e:
         print(f"Ошибка: {e}")
