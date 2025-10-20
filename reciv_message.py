@@ -1,67 +1,48 @@
-import socket 
-import base64
-import numpy as np
+import socket
+import pickle
+import struct
 import cv2
-import threading
-from threading import Thread
 
+# Настройки сервера
+host = '0.0.0.0'
+port = 5000
 
-HOST = "0.0.0.0"
-PORT = 12532
+# Создание сокета
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind((host, port))
+server_socket.listen(5)
+print(f"Сервер запущен на {host}:{port}")
 
+# Принятие подключения
+client_socket, addr = server_socket.accept()
+print(f"Подключился клиент: {addr}")
 
-def reciv_message(data):
-    try:
-        decoded_bytes = base64.b64decode(data)
-        frame = cv2.imdecode(np.frombuffer(decoded_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
-        return frame
-    except Exception as e:
-        print(f"Ошибка декодирования: {e}")
-        return None
+data = b""
+payload_size = struct.calcsize("L")
 
-def handle_client(conn, addr):
-    try:
-        while True:
-            data = conn.recv(65536)
-            if not data:
-                break
-            
-            frame = reciv_message(data)
-            if frame is not None and frame.size > 0:
-                cv2.imshow("frame", frame)
-            
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-                
-    except Exception as e:
-        print(f"Ошибка с клиентом {addr}: {e}")
-    finally:
-        conn.close()
-        
-
-def loop():
-    global client_counter
+while True:
+    # Получение размера кадра
+    while len(data) < payload_size:
+        data += client_socket.recv(4096)
     
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind((HOST, PORT))
-        s.listen()
-        print(f"Сервер запущен на {HOST}:{PORT}")
-        print("Ожидание подключений...")
-        
-        while True:
-            conn, addr = s.accept()
-            
-            print(f"Новое подключение: {addr}")
-            
-            # Запускаем отдельный поток для каждого клиента
-            client_thread = Thread(target=handle_client, args=(conn, addr))
-            client_thread.daemon = True
-            client_thread.start()
+    packed_msg_size = data[:payload_size]
+    data = data[payload_size:]
+    msg_size = struct.unpack("L", packed_msg_size)[0]
 
-if __name__ == "__main__":
-    try:
-        loop()
-    except KeyboardInterrupt:
-        print("\nСервер завершает работу...")
-    finally:
-        cv2.destroyAllWindows()
+    # Получение данных кадра
+    while len(data) < msg_size:
+        data += client_socket.recv(4096)
+    
+    frame_data = data[:msg_size]
+    data = data[msg_size:]
+
+    # Десериализация кадра
+    frame = pickle.loads(frame_data)
+    
+    # Отображение кадра
+    cv2.imshow('Video Stream', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+client_socket.close()
+cv2.destroyAllWindows()
